@@ -8,15 +8,26 @@ public class Account {
 	
 	private String accountType;
 	
-	private Client client;
-	
 	private int accountId;
 	
-	public Account(Client client, int accountId, String nickName, String accountType, double balance) {
-		this.client = client;
+	//Constructor for initial accounts
+	public Account(int accountId, String accountType) {
 		this.accountId = accountId;
-		this.nickName = nickName;
+		this.nickName = accountType;
 		this.accountType = accountType;
+		//add to DB?
+	}
+	
+	//Constructor for new accounts
+	public Account(int accountId, String nickName, String accountType) {
+		this(accountId, accountType);
+		this.nickName = nickName;
+		//other constructor adds to DB?
+	}
+	
+	//Constructor for existing accounts from DB
+	public Account(int accountId, String nickName, String accountType, double balance) {
+		this(accountId, nickName, accountType);
 		this.balance = balance;
 	}
 
@@ -34,14 +45,6 @@ public class Account {
 
 	public void setAccountType(String accountType) {
 		this.accountType = accountType;
-	}
-
-	public Client getClient() {
-		return client;
-	}
-
-	public void setClient(Client client) {
-		this.client = client;
 	}
 
 	public int getAccountId() {
@@ -63,8 +66,9 @@ public class Account {
 	
 	@Override
 	public String toString() {
-		return "Account [balance=" + balance + ", nickName=" + nickName + ", accountType=" + accountType + ", client="
-				+ client + ", accountId=" + accountId + "]";
+		return  nickName;
 	}
+	
+	
 
 }
