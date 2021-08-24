@@ -1,0 +1,27 @@
+
+.metadata/.lock
+.metadata/.log
+*.json
+*.properties
+*.css
+.metadata/.plugins/org.eclipse.core.resources/.history/20/d0eed81de904001c1f9fd2951672185d
+.metadata/.plugins/org.eclipse.core.resources/.history/26/c0e21641ea04001c1f9fd2951672185d
+*.index
+*.snap
+*.resources
+*.prefs
+*.xmi
+*.txt
+*.dat
+.metadata/.plugins/org.eclipse.jdt.core/externalLibsTimeStamps
+*.xml
+*.png
+*.history
+*.log
+*.setup
+.metadata/.plugins/org.eclipse.ui.intro/introstate
+*.check
+*.ini
+Banking API/.classpath
+Banking API/.project
+*.class
