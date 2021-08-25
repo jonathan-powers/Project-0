@@ -8,6 +8,14 @@ import java.util.Set;
 public class AccountManager {
 	
 	private static Set<Client> clients = new HashSet<Client>();
+	
+	public static Client newClient(String name) {
+		Client client = new Client(name);
+		
+		clients.add(client);
+		
+		return client;
+	}
 
 	public static Set<Client> getClients() {
 		return clients;
@@ -16,9 +24,4 @@ public class AccountManager {
 	public static void setClients(Set<Client> clients) {
 		AccountManager.clients = clients;
 	}
-	
-
-	
-
-
 }

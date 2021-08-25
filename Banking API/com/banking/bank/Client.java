@@ -37,6 +37,7 @@ public class Client {
 	public Account newAccount( String nickName, String accountType) {
 		Account account = new Account( accounts.size(), nickName, accountType);
 		
+		accounts.add(account);
 		//add account to DB?
 		
 		return account;
