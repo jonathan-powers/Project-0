@@ -11,33 +11,34 @@ public class Driver {
 	
 	public static void main(String[] args) {
 		
-
+		//creates local host to receive requests from Postman
 		Javalin app = Javalin.create().start(7000);
+		
 		app.get("/hello", ctx -> ctx.html("Hello, Javalin!"));
 
 		app.get("/clients", GetController.fetchAllClients);
 
-		app.get("/clients/*", GetController.fetchClient);
+		app.get("/clients/:client", GetController.fetchClient);
 
-		app.get("/clients/*/accounts", GetController.fetchAllAccounts);
+		app.get("/clients/:client/accounts", GetController.fetchAllAccounts);
 
-		app.get("/clients/*/accounts/*", GetController.fetchAccount);
+		app.get("/clients/:client/accounts/:account", GetController.fetchAccount);
 
 		app.post("/clients", PostController.NewClient);
 
-		app.post("/clients/*/accounts", PostController.NewAccount);
+		app.post("/clients/:client/accounts", PostController.NewAccount);
 
-		app.put("/clients/*", PutController.UpdateClient);
+		app.put("/clients/:client", PutController.UpdateClient);
 
-		app.put("/clients/*/accounts/*", PutController.UpdateAccount);
+		app.put("/clients/:client/accounts/:account", PutController.UpdateAccount);
 
-		app.patch("/clients/*/accounts/*", PatchController.DepOrWith);
+		app.patch("/clients/:client/accounts/:account", PatchController.DepOrWith);
 
-		app.patch("/clients/*/accounts/*/transfer/*", PatchController.Transfer);
+		app.patch("/clients/:client/accounts/:account/transfer/:transfer", PatchController.Transfer);
 
-		app.delete("/clients/*", DeleteController.DeleteClient);
+		app.delete("/clients/:client", DeleteController.DeleteClient);
 
-		app.delete("/clients/*/accounts/*", DeleteController.DeleteAccount);
+		app.delete("/clients/:client/accounts/:account", DeleteController.DeleteAccount);
 
 		app.get("/exception", ctx -> {
 			throw new Exception("test");

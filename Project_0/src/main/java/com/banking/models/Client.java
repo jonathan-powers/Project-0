@@ -10,7 +10,7 @@ public class Client {
 	
 	private static Set<Client> clients = new HashSet<Client>();
 	
-	//constructor
+	
 	public Client(String name, int clientId) {
 		this.name = name;
 		this.clientId = clientId;

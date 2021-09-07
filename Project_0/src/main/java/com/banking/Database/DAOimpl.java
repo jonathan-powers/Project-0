@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashSet;
 import java.util.Set;
 
 import com.banking.models.Account;
@@ -43,6 +44,9 @@ public class DAOimpl implements DAO {
 		String sql = "SELECT * FROM accounts WHERE customer_id = " + client.getClientId();
 		PreparedStatement pstmt = connection.prepareStatement(sql);
 		ResultSet rs = pstmt.executeQuery();
+		
+		HashSet<Account> Accounts = new HashSet<Account>();
+		
 		while(rs.next()) {
 			Account row = new Account();
 			row.setAccountId(rs.getInt("account_id"));
@@ -52,8 +56,9 @@ public class DAOimpl implements DAO {
 			row.setBalance(rs.getDouble("balance"));
 			row.setClientId(rs.getInt("customer_id"));
 			Account.getAccounts().add(row);
+			Accounts.add(row);
 		}
-		return Account.getAccounts();
+		return Accounts;
 	}
 
 	@Override
@@ -88,7 +93,7 @@ public class DAOimpl implements DAO {
 
 	@Override
 	public void updateClient(Connection connection, Client client) throws SQLException {
-		String sql = "UPDATE customers SET name = " + client.getName() + "WHERE customer_id =" + client.getClientId();
+		String sql = "UPDATE customers SET name = \"" + client.getName() + "\" WHERE customer_id = " + client.getClientId();
 		PreparedStatement pstmt = connection.prepareStatement(sql);
 		pstmt.executeQuery();
 		
@@ -96,9 +101,12 @@ public class DAOimpl implements DAO {
 
 	@Override
 	public void updateAccount(Connection connection, Account account) throws SQLException {
-		String sql = "UPDATE accounts SET balance = " + account.getBalance() + "WHERE account_id =" + account.getAccountId();
-		PreparedStatement pstmt = connection.prepareStatement(sql);
-		pstmt.executeQuery();
+		String sql1 = "UPDATE accounts SET account_name = \"" + account.getNickName() + "\" WHERE account_id = " + account.getAccountId();
+		PreparedStatement pstmt1 = connection.prepareStatement(sql1);
+		pstmt1.executeQuery();
+		String sql2 = "UPDATE accounts SET balance = " + account.getBalance() + " WHERE account_id = " + account.getAccountId();
+		PreparedStatement pstmt2 = connection.prepareStatement(sql2);
+		pstmt2.executeQuery();
 		
 	}
 
@@ -107,7 +115,10 @@ public class DAOimpl implements DAO {
 		String sql1 = "DELETE FROM accounts WHERE customer_id = " + client.getClientId();
 		PreparedStatement pstmt1 = connection.prepareStatement(sql1);
 		pstmt1.executeQuery();
-		String sql2 = "DELETE FROM clients WHERE customer_id = " + client.getClientId();
+		
+		//Need to delete accounts first because customers id is a foreign key
+		
+		String sql2 = "DELETE FROM customers WHERE customer_id = " + client.getClientId();
 		PreparedStatement pstmt2 = connection.prepareStatement(sql2);
 		pstmt2.executeQuery();
 		
@@ -124,7 +135,7 @@ public class DAOimpl implements DAO {
 	@Override
 	public void addClient(Connection connection, Client client) throws SQLException {
 		String sql = "INSERT INTO customers (customer_id,name) VALUES "
-				+ "(" + client.getClientId()+ "," + client.getName() + ")";
+				+ "(" + client.getClientId()+ ", \"" + client.getName() + "\")";
 		PreparedStatement pstmt = connection.prepareStatement(sql);
 		pstmt.executeQuery();
 		
@@ -133,8 +144,8 @@ public class DAOimpl implements DAO {
 	@Override
 	public void addAccount(Connection connection, Account account) throws SQLException {
 		String sql = "INSERT INTO accounts (account_id, account_type, account_name, balance, customer_id)"
-				+ " VALUES (" + account.getAccountId() + "," + account.getAccountType() + "," + account.getNickName()
-				+ "," + account.getBalance() + "," + account.getClientId();
+				+ " VALUES (" + account.getAccountId() + ", \"" + account.getAccountType() + "\", \"" + account.getNickName()
+				+ "\", " + account.getBalance() + "," + account.getClientId() +")";
 		PreparedStatement pstmt = connection.prepareStatement(sql);
 		pstmt.executeQuery();
 		

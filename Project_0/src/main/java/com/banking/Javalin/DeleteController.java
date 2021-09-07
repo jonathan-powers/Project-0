@@ -7,23 +7,49 @@ import com.banking.models.Client;
 import io.javalin.http.Handler;
 
 public class DeleteController {
-	
+
+	/**
+	 * Handler to delete Client
+	 */
 	public static Handler DeleteClient = ctx -> {
 
-		// TODO get Client data from body
-		Client client = DAOimpl.instance().getClient(Driver.connection, Integer.parseInt(ctx.splat(0)));
-		DAOimpl.instance().deleteClient(Driver.connection, client);
+		// get Client data
+		Client client = DAOimpl.instance().getClient(Driver.connection, Integer.parseInt(ctx.pathParam(":client")));
 
-		ctx.json(client);
+		// Check to see if client exists
+		if (client.getClientId() == 0) {
+			ctx.status(404);
+			ctx.result("Client not Found");
+		} else {
+			// Deletes client from DB
+			DAOimpl.instance().deleteClient(Driver.connection, client);
+
+			ctx.status(205);
+			ctx.json(client);
+		}
 	};
-	
+	/**
+	 * Handler to delete account
+	 */
 	public static Handler DeleteAccount = ctx -> {
 
-		// TODO get Account data from body and
-		Account account = DAOimpl.instance().getAccount(Driver.connection, Integer.parseInt(ctx.splat(1)));
-		DAOimpl.instance().deleteAccount(Driver.connection, account);
+		// get Account data
+		Account account = DAOimpl.instance().getAccount(Driver.connection, Integer.parseInt(ctx.pathParam(":account")));
 
-		ctx.json(account);
+		// Checks to see if client and account exist then checks if the account matches
+		// the client
+		if (account.getClientId() == 0 || account.getAccountId() == 0
+				|| DAOimpl.instance().getClient(Driver.connection, Integer.parseInt(ctx.pathParam(":client")))
+						.getClientId() != account.getClientId()) {
+			ctx.status(404);
+			ctx.result("Client or Account not Found");
+		} else {
+			// deletes account from DB
+			DAOimpl.instance().deleteAccount(Driver.connection, account);
+
+			ctx.status(205);
+			ctx.json(account);
+		}
 	};
 
 }

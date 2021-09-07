@@ -13,6 +13,7 @@ public class ConnectionFactory {
 
     }
 
+    //Design to allow only one connection to Database
     public static Connection getConnection() {
         if(connection == null) {
             try {
@@ -28,8 +29,8 @@ public class ConnectionFactory {
                         props.getProperty("username") + "&password=" +
                         props.getProperty("password");
 
-
                 connection = DriverManager.getConnection(connectionString);
+                
             } catch (Exception e) {
                 e.printStackTrace();
             }

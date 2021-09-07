@@ -8,22 +8,51 @@ import io.javalin.http.Handler;
 
 public class PutController {
 
+	/**
+	 * Handler for updating Client data
+	 */
 	public static Handler UpdateClient = ctx -> {
 
-		// TODO get Client data from body
-		Client client = DAOimpl.instance().getClient(Driver.connection, Integer.parseInt(ctx.splat(0)));
-		DAOimpl.instance().updateClient(Driver.connection, client);
+		//get Client data from body
+		Client client =  new Client();
+		client = ctx.bodyAsClass(client.getClass());
+		
+		client = DAOimpl.instance().getClient(Driver.connection, Integer.parseInt(ctx.pathParam(":client")));
 
-		ctx.json(client);
+		if (client.getClientId() == 0) {
+			ctx.status(404);
+			ctx.result("Client not Found");
+		} else {
+			DAOimpl.instance().updateClient(Driver.connection, client);
+			
+			ctx.status(200);
+			ctx.json(client);
+		}
 	};
 
+	/**
+	 * Handler for updating Account data
+	 */
 	public static Handler UpdateAccount = ctx -> {
 
-		// TODO get Account data from body and
-		Account account = DAOimpl.instance().getAccount(Driver.connection, Integer.parseInt(ctx.splat(1)));
+		//get Account data from body
+		Account account = new Account();
+		account = ctx.bodyAsClass(account.getClass());
+		
+		
 		DAOimpl.instance().updateAccount(Driver.connection, account);
+		account = DAOimpl.instance().getAccount(Driver.connection, Integer.parseInt(ctx.pathParam(":account")));
 
-		ctx.json(account);
+		
+		if (account.getClientId() == 0 || 
+				DAOimpl.instance().getClient(Driver.connection, 
+						Integer.parseInt(ctx.pathParam(":client"))).getClientId() != account.getClientId()) {
+			ctx.status(404);
+			ctx.result("Account or Client not found");
+		} else {
+			ctx.status(200);
+			ctx.json(account);
+		}
 	};
 
 }
