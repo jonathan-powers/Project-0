@@ -30,13 +30,17 @@ public class DAOimpl implements DAO {
 		String sql = "SELECT * FROM customers";
 		PreparedStatement pstmt = connection.prepareStatement(sql);
 		ResultSet rs = pstmt.executeQuery();
+		
+		HashSet<Client> Clients = new HashSet<Client>();
+		
 		while(rs.next()) {
 			Client row = new Client();
 			row.setClientId(rs.getInt("customer_id"));
 			row.setName(rs.getString("name"));
+			Clients.add(row);
 			Client.getClients().add(row);
 		}
-		return Client.getClients();
+		return Clients;
 	}
 
 	@Override
