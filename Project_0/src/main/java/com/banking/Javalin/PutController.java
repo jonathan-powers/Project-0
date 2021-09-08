@@ -17,9 +17,9 @@ public class PutController {
 		Client client =  new Client();
 		client = ctx.bodyAsClass(client.getClass());
 		
-		client = DAOimpl.instance().getClient(Driver.connection, Integer.parseInt(ctx.pathParam(":client")));
+		Client Cclient = DAOimpl.instance().getClient(Driver.connection, Integer.parseInt(ctx.pathParam(":client")));
 
-		if (client.getClientId() == 0) {
+		if (Cclient.getClientId() == 0) {
 			ctx.status(404);
 			ctx.result("Client not Found");
 		} else {
